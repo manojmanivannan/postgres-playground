@@ -81,7 +81,7 @@ CREATE TABLE IF not EXISTS crime_data
   reported_dist_no int,
   part_1_2 int,
   crime_code int,
-  crime_description varchar(50),
+  crime_description varchar(70),
   mocodes varchar(60),
   victim_age int,
   victim_sex varchar(1),
