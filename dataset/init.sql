@@ -73,8 +73,8 @@ CSV HEADER;
 CREATE TABLE IF not EXISTS crime_data
 (
   dr_no int,
-  date_reported datetime,
-  date_occured datetime,
+  date_reported timestamp,
+  date_occured timestamp,
   time_occured time,
   area int,
   area_name varchar(30),
