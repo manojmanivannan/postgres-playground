@@ -9,7 +9,7 @@ CREATE TABLE inflation_data (
 );
 
 COPY inflation_data
-FROM '/docker-entrypoint-initdb.d/inflation.csv'
+FROM '/docker-entrypoint-initdb.d/csv/inflation.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS employee
 , SALARY int);
 
 COPY employee
-FROM '/docker-entrypoint-initdb.d/employee.csv'
+FROM '/docker-entrypoint-initdb.d/csv/employee.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -38,7 +38,7 @@ consultation_fee int
 );
 
 COPY doctors
-from '/docker-entrypoint-initdb.d/doctors.csv'
+from '/docker-entrypoint-initdb.d/csv/doctors.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -50,7 +50,7 @@ user_name varchar(50) not null,
 login_date date);
 
 COPY login_details
-from '/docker-entrypoint-initdb.d/login_details.csv'
+from '/docker-entrypoint-initdb.d/csv/login_details.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -64,7 +64,7 @@ CREATE TABLE IF not EXISTS patient_logs
 );
 
 copy patient_logs
-from '/docker-entrypoint-initdb.d/patient_logs.csv'
+from '/docker-entrypoint-initdb.d/csv/patient_logs.csv'
 DELIMITER ','
 CSV HEADER;
 
