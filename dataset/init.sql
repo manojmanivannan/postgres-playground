@@ -87,7 +87,7 @@ CREATE TABLE IF not EXISTS crime_data
   victim_sex varchar(1),
   victim_descent varchar(1),
   premis_code int,
-  premis_description varchar(60)
+  premis_description varchar(60),
   weapon_used_code int,
   weapon_used_description varchar(50),
   status_code varchar(2),
