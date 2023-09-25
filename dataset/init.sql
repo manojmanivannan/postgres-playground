@@ -97,7 +97,7 @@ CREATE TABLE IF not EXISTS crime_data
   crime_code_3 int,
   crime_code_4 int,
   location varchar(60),
-  cross_street varchar(30),
+  cross_street varchar(50),
   latitude numeric(11,8),
   longitude numeric(11,8)
 );
