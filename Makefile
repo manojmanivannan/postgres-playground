@@ -1,5 +1,14 @@
-# Define the default target
-all: run-script
+all: 
+	make download
+	make dk_start
+
+download:
+	$(SCRIPT)
+
+dk_start:
+	docker-compose up
+dk_stop:
+	docker-compose down --volumes --remove-orphans
 
 # Determine the operating system
 ifeq ($(OS),Windows_NT)
@@ -10,5 +19,9 @@ else
     SCRIPT := ./download-extra-dataset.sh
 endif
 
-run-script:
+download-extras:
 	$(SCRIPT)
+
+
+
+
