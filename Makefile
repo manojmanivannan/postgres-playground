@@ -7,8 +7,8 @@ ifeq ($(OS),Windows_NT)
     SCRIPT := download-extra-dataset.bat
 else
     # Unix/Linux shell script
-    SCRIPT := download-extra-dataset.sh
+    SCRIPT := ./download-extra-dataset.sh
 endif
 
 run-script:
-	./$(SCRIPT)
+	$(SCRIPT)
