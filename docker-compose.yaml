@@ -12,6 +12,10 @@ services:
     volumes: 
       - db:/var/lib/postgresql/data
       - ./dataset:/docker-entrypoint-initdb.d
+  python-job:
+    build: .
+    depends_on:
+      - db
 volumes:
   db:
     driver: local
