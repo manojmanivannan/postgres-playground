@@ -30,5 +30,5 @@ then
 		exit 1
 	fi
 else
-	echo -e "crime data already exists"
+	echo -e "Olympics data already exists"
 fi
