@@ -15,3 +15,20 @@ then
 else
 	echo -e "crime data already exists"
 fi
+
+if ! [ -f ./dataset/csv/athlete_events.csv ]
+then
+	echo -e "Downloading Olympics history data from techtfq.com"
+	wget -o ./dataset/csv/Olympics_data.zip https://techtfq.com/s/Olympics_data.zip
+
+	if [ $? -eq 0 ]
+	then
+		echo "Download complete"
+		unzip -o -d ./dataset/csv/ ./dataset/csv/Olympics_data.zip
+	else
+		echo "Download failed"
+		exit 1
+	fi
+else
+	echo -e "crime data already exists"
+fi

@@ -1,5 +1,3 @@
--- Find the top 2 accounts with the maximum number of unique patients on a monthly basis.
--- Note: Prefer the account id with the least value in case of same number of unique patients
 
 -- select * from patient_logs order by account_id;
 

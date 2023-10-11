@@ -1,4 +1,4 @@
--- From the login_details table, fetch the users who logged in consecutively 3 or more times.
+
 select distinct user_name from (
 
     select *,

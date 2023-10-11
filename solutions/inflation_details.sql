@@ -1,8 +1,4 @@
 
--- Find the top 5 countries who had the highest inflation rates 
--- and whose inflation increased or remained same for 3 or more consecutive years
--- optionally, give the year range where this increase occured
-
 select regionalmember as country,inflation as max_inflation,increase as year_range from
 (
 select *
