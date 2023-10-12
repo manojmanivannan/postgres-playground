@@ -104,7 +104,7 @@ for i in range(user_range):
 for i in range(product_range):
     product_id = i+1
     product_name = fake.unique.first_name()
-    category = fake.word(ext_word_list=['Electronics', 'Clothing', 'Books', 'Toys'])
+    category = fake.word(ext_word_list=['Electronics', 'Clothing', 'Books', 'Toys', 'Hobby','Vegetables','Fruits','Poultry','Meat','Frozen-Foods'])
     price = round(random.uniform(10, 500), 2)
     cursor.execute(f'INSERT INTO {schema_name}.Products (product_id, product_name, category, price) VALUES (%s, %s, %s, %s)', (product_id, product_name, category, price))
 
@@ -119,7 +119,7 @@ for i in range(order_range):
     total_amount = round(random.uniform(10, 500), 2)
     cursor.execute(f'INSERT INTO {schema_name}.Orders (user_id, order_id, order_date, total_amount) VALUES (%s, %s, %s, %s)', (user_id, order_id, order_date, total_amount))
 
-for i in range(50):
+for i in range(order_range):
     order_id = random.randint(1, order_range)
     order_detail_id=i+1
     product_id = random.randint(1, 20)
