@@ -1,3 +1,11 @@
+# This is just a copy of the py file which ends up
+# in the docker container manojmanivannan18/postgres-playground-py
+# 
+# Refer: https://github.com/manojmanivannan/docker-images/tree/master/postgres-playground-py-job
+# 
+# Any changes to this file should be really made in the above  
+# github file to take effect in this project
+
 import psycopg2
 from faker import Faker
 import random

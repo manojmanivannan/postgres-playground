@@ -13,7 +13,7 @@ services:
       - db:/var/lib/postgresql/data
       - ./dataset:/docker-entrypoint-initdb.d
   python-job:
-    build: .
+    image: manojmanivannan18/postgres-playground-py:latest
     depends_on:
       - db
 volumes:
