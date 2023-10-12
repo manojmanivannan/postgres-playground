@@ -8,7 +8,7 @@ download:
 	$(SCRIPT)
 
 dk_start:
-	docker-compose up --build
+	docker-compose up --build -d
 dk_stop:
 	docker-compose down --volumes --remove-orphans
 

@@ -76,3 +76,32 @@ JOIN ecomm.users u ON t5.user_id = u.user_id
 WHERE t5.ranking <= 5;
 
 -- 6. Calcate the average order total for each product category
+
+SELECT p.category,
+	avg(o.total_amount) AS avg_order_amount
+FROM ecomm.orders o
+RIGHT JOIN ecomm.orderdetails od ON o.order_id = od.order_id
+JOIN ecomm.products p ON od.product_id = p.product_id
+GROUP BY p.category
+ORDER BY avg_order_amount;
+
+-- 7. Determine the user with the highest lifetime spending.
+
+WITH t6
+AS (
+	SELECT u.username,
+		sum(o.total_amount) AS total_spending
+	FROM ecomm.orders o
+	JOIN ecomm.users u ON o.user_id = u.user_id
+	GROUP BY u.username
+	)
+SELECT username,
+	round(total_spending::NUMERIC, 2) AS total_spending
+FROM (
+	SELECT *,
+		rank() OVER (
+			ORDER BY total_spending DESC
+			)
+	FROM t6
+	) t7
+WHERE rank = 1;
