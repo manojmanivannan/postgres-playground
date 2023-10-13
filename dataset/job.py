@@ -1,8 +1,8 @@
-# This is py file is the entry point of the python docker container 
+# This py file is the entry point of the python docker container 
 # at https://github.com/manojmanivannan/docker-images/tree/master/postgres-playground-py-job
 # 
 # If you update this file, run the actions on the repo 
-# https://github.com/manojmanivannan/docker-images
+# https://github.com/manojmanivannan/docker-images to build a new image and pushed to docker hub
 
 
 import psycopg2
