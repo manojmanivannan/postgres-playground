@@ -105,3 +105,87 @@ FROM (
 	FROM t6
 	) t7
 WHERE rank = 1;
+
+-- 8. Find the products that have never been ordered.
+-- -----------------------------------
+-- Insert a new product into the products table which 
+-- will have not be present or used in orders table
+
+INSERT INTO ecomm.products (
+	product_id,
+	product_name,
+	category,
+	price
+	)
+VALUES (
+	555,
+	'Test Product',
+	'Test Category',
+	0
+	);
+
+
+SELECT *
+FROM ecomm.products p2
+WHERE product_id NOT IN (
+		SELECT od.product_id
+		FROM ecomm.orders o
+		JOIN ecomm.orderdetails od ON o.order_id = od.order_id
+		JOIN ecomm.products p ON od.product_id = p.product_id
+		);
+
+-- 9. Calculate the total quantity of each product sold.
+
+SELECT p.product_name,
+	sum(od.quantity)
+FROM ecomm.orders o
+JOIN ecomm.orderdetails od ON o.order_id = od.order_id
+JOIN ecomm.products p ON od.product_id = p.product_id
+GROUP BY p.product_name;
+
+-- 10. List the users who registered more than a year ago and have not placed any orders.
+SELECT u.username,
+	u.registration_date
+FROM ecomm.orders o
+FULL OUTER JOIN ecomm.users u ON o.user_id = u.user_id
+WHERE o.order_id IS NULL
+	AND u.registration_date < now() - interval '1 year';
+
+-- 11. Rank Users by Total Spending: Rank users based on their total spending in descending order.
+
+WITH t8
+AS (
+	SELECT *,
+		rank() OVER (
+			ORDER BY total_spending DESC
+			)
+	FROM (
+		SELECT user_id,
+			sum(total_amount) AS total_spending
+		FROM ecomm.orders o
+		GROUP BY user_id
+		) t9
+	)
+SELECT u.username,
+	round(total_spending::NUMERIC, 2) AS total_spending
+FROM t8
+JOIN ecomm.users u ON t8.user_id = u.user_id
+WHERE rank <= 5;
+
+-- 12. Calculate User Order Frequency: Find the average time between orders for each user.
+
+WITH order_diff
+AS (
+	SELECT user_id,
+		order_date - lag(order_date) OVER (
+			PARTITION BY user_id ORDER BY order_date
+			) AS difference
+	FROM ecomm.orders
+	)
+SELECT u.username,
+	avg(difference) AS avg_order_frequency
+FROM order_diff od
+JOIN ecomm.users u ON od.user_id = u.user_id
+WHERE difference IS NOT NULL
+GROUP BY u.username
+ORDER BY avg_order_frequency;
