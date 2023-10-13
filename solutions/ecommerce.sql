@@ -183,9 +183,9 @@ AS (
 	FROM ecomm.orders
 	)
 SELECT u.username,
-	avg(difference) AS avg_order_frequency
+	avg(difference) AS avg_order_frequency_days
 FROM order_diff od
 JOIN ecomm.users u ON od.user_id = u.user_id
 WHERE difference IS NOT NULL
 GROUP BY u.username
-ORDER BY avg_order_frequency;
+ORDER BY avg_order_frequency_days;
