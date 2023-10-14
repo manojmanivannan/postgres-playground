@@ -12,6 +12,10 @@ dk_start:
 dk_stop:
 	docker-compose down --volumes --remove-orphans
 
+clean:
+	make dk_stop
+	docker rmi manojmanivannan18/postgres-playground-py
+
 # Determine the operating system
 ifeq ($(OS),Windows_NT)
     # Windows batch file
