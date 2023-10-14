@@ -126,3 +126,53 @@ SELECT country,
 	cp.total_participated
 FROM countries_participated cp
 JOIN tot_games tg ON cp.total_participated = tg.total_games;
+
+-- 6. Identify the sport which was played in all summer olympics.
+-- find number of summer games held
+-- find games and sports games in summers
+-- find games and their counts of the sports played in summers
+-- match games,their counts where counts =  number of summer games held
+
+WITH total_summer_games
+AS (
+	SELECT count(DISTINCT games) AS tot_games
+	FROM olympics_history oh
+	WHERE season = 'Summer'
+	),
+sport_count
+AS (
+	SELECT DISTINCT sport,
+		games AS games_in_summer
+	FROM olympics_history oh
+	WHERE season = 'Summer'
+	),
+sport_game_count
+AS (
+	SELECT sport,
+		count(1) AS number_of_games_in_summer
+	FROM sport_count
+	GROUP BY sport
+	)
+SELECT *
+FROM sport_game_count sc
+JOIN total_summer_games tsg ON sc.number_of_games_in_summer = tsg.tot_games;
+
+-- 7. Which Sports were just played only once in the olympics?
+WITH sport_year
+AS (
+	SELECT DISTINCT sport AS sport,
+		games
+	FROM olympics_history oh
+	),
+years_played
+AS (
+	SELECT sport,
+		count(games) AS no_games_played
+	FROM sport_year
+	GROUP BY sport
+	)
+SELECT DISTINCT yp.sport,
+	oh.games
+FROM years_played yp
+JOIN sport_year oh ON yp.sport = oh.sport
+WHERE no_games_played = 1;
