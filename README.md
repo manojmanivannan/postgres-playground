@@ -13,9 +13,10 @@ If not, check these pages for installing these tools in windows
 ```
 Usage
         make dk_start   - Start the docker containers
-        make dk_stop    - Stop the docker containers
-        make download   - Download extra dataset from web
-        make all        - Download extra dataset from web and Start the docker containers
+		make dk_stop    - Stop the docker containers
+		make download   - Download extra dataset from web
+		make all        - Download extra dataset from web and Start the docker containers
+		make clean      - Stop and remove docker containers
 ```
 
 ## Questions

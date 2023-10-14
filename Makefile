@@ -15,6 +15,7 @@ dk_stop:
 clean:
 	make dk_stop
 	docker rmi manojmanivannan18/postgres-playground-py
+	docker rmi postgres:14.1-alpine
 
 # Determine the operating system
 ifeq ($(OS),Windows_NT)
@@ -36,3 +37,4 @@ usage:
 	@$(ECHO) 	make dk_stop    - Stop the docker containers
 	@$(ECHO) 	make download   - Download extra dataset from web
 	@$(ECHO) 	make all        - Download extra dataset from web and Start the docker containers
+	@$(ECHO) 	make clean      - Stop and remove docker containers
