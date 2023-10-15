@@ -158,6 +158,7 @@ FROM sport_game_count sc
 JOIN total_summer_games tsg ON sc.number_of_games_in_summer = tsg.tot_games;
 
 -- 7. Which Sports were just played only once in the olympics?
+
 WITH sport_year
 AS (
 	SELECT DISTINCT sport AS sport,
@@ -176,3 +177,89 @@ SELECT DISTINCT yp.sport,
 FROM years_played yp
 JOIN sport_year oh ON yp.sport = oh.sport
 WHERE no_games_played = 1;
+
+-- 8. Fetch the total no of sports played in each olympic games.
+
+WITH game_sport
+AS (
+	SELECT games,
+		sport
+	FROM olympics_history oh
+	GROUP BY games,
+		sport
+	)
+SELECT games,
+	count(sport)
+FROM game_sport
+GROUP BY games
+ORDER BY count DESC;
+
+-- 9. Fetch details of the oldest athletes to win a gold medal.
+
+WITH gold_medal
+AS (
+	SELECT DISTINCT name,
+		cast(CASE 
+				WHEN age = 'NA'
+					THEN '0'
+				ELSE age
+				END AS INT) AS age,
+		sex,
+		team,
+		games,
+		city,
+		sport,
+		event,
+		medal
+	FROM olympics_history oh
+	WHERE medal = 'Gold'
+	),
+oldest
+AS (
+	SELECT *,
+		rank() OVER (
+			ORDER BY age DESC
+			)
+	FROM gold_medal
+	)
+SELECT *
+FROM oldest
+WHERE rank = 1;
+
+-- 10. Find the Ratio of male and female athletes participated in all olympic games.
+-- every record is a pariticipation
+
+WITH sex_split
+AS (
+	SELECT sex,
+		count(1) AS cnt
+	FROM olympics_history oh
+	GROUP BY sex
+	),
+sex_split_rank
+AS (
+	SELECT *,
+		row_number() OVER (
+			ORDER BY cnt
+			)
+	FROM sex_split
+	),
+min_cnt
+AS (
+	SELECT cnt
+	FROM sex_split_rank
+	WHERE row_number = 1
+	),
+max_cnt
+AS (
+	SELECT cnt
+	FROM sex_split_rank
+	WHERE row_number = 2
+	)
+SELECT CONCAT (
+		'1 : ',
+		round(max_cnt.cnt::NUMERIC / min_cnt.cnt, 2)
+		) AS ratio_male_to_female
+FROM min_cnt,
+	max_cnt;
+
