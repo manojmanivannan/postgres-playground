@@ -145,3 +145,5 @@ from '/docker-entrypoint-initdb.d/csv/noc_regions.csv'
 DELIMITER ','
 CSV HEADER;
 -- -----------------------------------------------------------------
+-- Enable extensions crosstab
+CREATE EXTENSION TABLEFUNC;

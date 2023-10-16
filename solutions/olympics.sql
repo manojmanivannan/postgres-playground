@@ -263,3 +263,204 @@ SELECT CONCAT (
 FROM min_cnt,
 	max_cnt;
 
+-- 11. Fetch the top 5 athletes who have won the most gold medals.
+
+WITH gold_medal_ath
+AS (
+	SELECT name,
+		team,
+		count(1) AS no_medals
+	FROM olympics_history oh
+	WHERE medal = 'Gold'
+	GROUP BY name,
+		team
+	),
+gold_count
+AS (
+	SELECT *,
+		dense_rank() OVER (
+			ORDER BY no_medals DESC
+			) AS rank
+	FROM gold_medal_ath
+	)
+SELECT name,
+	team,
+	no_medals
+FROM gold_count
+WHERE rank <= 5;
+
+-- 12. Fetch the top 5 athletes who have won the most medals (gold/silver/bronze).
+
+WITH gold_medal_ath
+AS (
+	SELECT name,
+		team,
+		count(1) AS no_medals
+	FROM olympics_history oh
+	WHERE medal IN (
+			'Gold',
+			'Silver',
+			'Bronze'
+			)
+	GROUP BY name,
+		team
+	),
+gold_count
+AS (
+	SELECT *,
+		dense_rank() OVER (
+			ORDER BY no_medals DESC
+			) AS rank
+	FROM gold_medal_ath
+	)
+SELECT name,
+	team,
+	no_medals
+FROM gold_count
+WHERE rank <= 5;
+
+-- 13. Fetch the top 5 most successful countries in olympics. Success is defined by no of medals won.
+
+WITH gold_medal_ath
+AS (
+	SELECT team,
+		noc,
+		count(1) AS no_medals
+	FROM olympics_history oh
+	WHERE medal IN (
+			'Gold',
+			'Silver',
+			'Bronze'
+			)
+	GROUP BY team,
+		noc
+	),
+gold_count
+AS (
+	SELECT *,
+		rank() OVER (
+			ORDER BY no_medals DESC
+			) AS rank
+	FROM gold_medal_ath
+	)
+SELECT ohnr.region AS Country,
+	no_medals,
+	rank
+FROM gold_count gc
+JOIN olympics_history_noc_regions ohnr ON gc.noc = ohnr.noc
+WHERE rank <= 5;
+
+-- 14. List down total gold, silver and bronze medals won by each country.
+WITH medals
+AS (
+	SELECT noc,
+		medal,
+		count(1) AS no_medals
+	FROM olympics_history oh
+	WHERE medal IN (
+			'Gold',
+			'Silver',
+			'Bronze'
+			)
+	GROUP BY noc,
+		medal
+	),
+gold
+AS (
+	SELECT noc,
+		sum(no_medals) AS gold_medals
+	FROM medals
+	WHERE medal = 'Gold'
+	GROUP BY noc
+	),
+silver
+AS (
+	SELECT noc,
+		sum(no_medals) AS silver_medals
+	FROM medals
+	WHERE medal = 'Silver'
+	GROUP BY noc
+	),
+bronze
+AS (
+	SELECT noc,
+		sum(no_medals) AS bronze_medals
+	FROM medals
+	WHERE medal = 'Bronze'
+	GROUP BY noc
+	),
+combined
+AS (
+	SELECT b.noc,
+		bronze_medals,
+		silver_medals,
+		gold_medals
+	FROM bronze b
+	JOIN gold g ON b.noc = g.noc
+	JOIN silver s ON s.noc = b.noc
+	)
+SELECT ohnr.region,
+	bronze_medals,
+	silver_medals,
+	gold_medals
+FROM combined c
+JOIN olympics_history_noc_regions ohnr ON c.noc = ohnr.noc
+ORDER BY gold_medals DESC;
+
+
+
+-- Using crosstab feature
+SELECT country,
+	coalesce(gold, 0) AS gold,
+	coalesce(silver, 0) AS silver,
+	coalesce(bronze, 0) AS bronze
+FROM CROSSTAB('SELECT nr.region as country
+			, medal
+			, count(1) as total_medals
+			FROM olympics_history oh
+			JOIN olympics_history_noc_regions nr ON nr.noc = oh.noc
+			where medal <> ''NA''
+			GROUP BY nr.region,medal
+			order BY nr.region,medal', 'values (''Bronze''), (''Gold''), (''Silver'')') AS FINAL_RESULT(country VARCHAR, bronze BIGINT, gold BIGINT, silver BIGINT)
+ORDER BY gold DESC,
+	silver DESC,
+	bronze DESC;
+
+
+-- 15. List down total gold, silver and bronze medals won by each country corresponding to each olympic games.
+-- My solution
+SELECT games,
+	country,
+	sum(coalesce(bronze, 0)) AS bronze,
+	sum(coalesce(gold, 0)) AS gold,
+	sum(coalesce(silver, 0)) AS silver
+FROM crosstab('
+	select games,nr.region as country, medal,count(1) as total_medals 
+	from olympics_history oh 
+	join olympics_history_noc_regions nr on nr.noc=oh.noc 
+	where medal <> ''NA'' 
+	group by games,nr.region,medal
+	order by nr.region,medal', 'values(''Bronze''),(''Gold''),(''Silver'')') AS final_result(games VARCHAR, country VARCHAR, bronze BIGINT, gold BIGINT, silver BIGINT)
+GROUP BY games,
+	country
+ORDER BY games,
+	gold DESC,
+	silver DESC,
+	bronze DESC;
+
+
+
+-- online solution
+SELECT substring(games, 1, position(' - ' IN games) - 1) AS games,
+	substring(games, position(' - ' IN games) + 3) AS country,
+	coalesce(gold, 0) AS gold,
+	coalesce(silver, 0) AS silver,
+	coalesce(bronze, 0) AS bronze
+FROM CROSSTAB('SELECT concat(games, '' - '', nr.region) as games
+            , medal
+            , count(1) as total_medals
+            FROM olympics_history oh
+            JOIN olympics_history_noc_regions nr ON nr.noc = oh.noc
+            where medal <> ''NA''
+            GROUP BY games,nr.region,medal
+            order BY games,medal', 'values (''Bronze''), (''Gold''), (''Silver'')') AS FINAL_RESULT(games TEXT, bronze BIGINT, gold BIGINT, silver BIGINT);
