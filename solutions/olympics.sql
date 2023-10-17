@@ -562,3 +562,46 @@ WHERE gold = 0
 ORDER BY gold DESC nulls last,
 	silver DESC nulls last,
 	bronze DESC nulls last;
+
+-- 19. In which Sport/event, India has won highest medals.
+WITH india
+AS (
+	SELECT sport,
+		count(1)
+	FROM olympics_history oh
+	WHERE team = 'India'
+		AND medal <> 'NA'
+	GROUP BY sport
+	),
+ranked
+AS (
+	SELECT *,
+		rank() OVER (
+			ORDER BY count DESC
+			)
+	FROM india
+	)
+SELECT sport,
+	count AS medals
+FROM ranked
+WHERE rank = 1;
+
+--   20. Break down all olympic games where india won medal for Hockey and how many medals in each olympic games.
+
+WITH india
+AS (
+	SELECT team,
+		sport,
+		games,
+		count(1) AS medals
+	FROM olympics_history oh
+	WHERE team = 'India'
+		AND sport = 'Hockey'
+		AND medal <> 'NA'
+	GROUP BY team,
+		sport,
+		games
+	ORDER BY games
+	)
+SELECT *
+FROM india
