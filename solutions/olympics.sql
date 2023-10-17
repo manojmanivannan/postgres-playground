@@ -538,3 +538,27 @@ WITH temp as
 		,concat(first_value(country) over (partition by games order by bronze desc),'-',first_value(bronze) over (partition by games order by bronze desc)) as max_bronze
 		,concat(first_value(country) over (partition by games order by total_medals desc),'-',first_value(total_medals) over (partition by games order by total_medals desc)) as max_medals
 	from temp order by games;
+
+-- 18. Which countries have never won gold medal but have won silver/bronze medals?
+
+SELECT *
+FROM (
+	SELECT country,
+		coalesce(gold, 0) AS gold,
+		coalesce(silver, 0) AS silver,
+		coalesce(bronze, 0) AS bronze
+	FROM CROSSTAB('SELECT nr.region as country
+    					, medal, count(1) as total_medals
+    					FROM OLYMPICS_HISTORY oh
+    					JOIN OLYMPICS_HISTORY_NOC_REGIONS nr ON nr.noc=oh.noc
+    					where medal <> ''NA''
+    					GROUP BY nr.region,medal order BY nr.region,medal', 'values (''Bronze''), (''Gold''), (''Silver'')') AS FINAL_RESULT(country VARCHAR, bronze BIGINT, gold BIGINT, silver BIGINT)
+	) x
+WHERE gold = 0
+	AND (
+		silver > 0
+		OR bronze > 0
+		)
+ORDER BY gold DESC nulls last,
+	silver DESC nulls last,
+	bronze DESC nulls last;
