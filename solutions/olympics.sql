@@ -464,3 +464,77 @@ FROM CROSSTAB('SELECT concat(games, '' - '', nr.region) as games
             where medal <> ''NA''
             GROUP BY games,nr.region,medal
             order BY games,medal', 'values (''Bronze''), (''Gold''), (''Silver'')') AS FINAL_RESULT(games TEXT, bronze BIGINT, gold BIGINT, silver BIGINT);
+
+-- 16. Identify which country won the most gold, most silver and most bronze medals in each olympic games.
+
+WITH TEMP
+AS (
+	SELECT substring(games, 1, position(' - ' IN games) - 1) AS games,
+		substring(games, position(' - ' IN games) + 3) AS country,
+		coalesce(gold, 0) AS gold,
+		coalesce(silver, 0) AS silver,
+		coalesce(bronze, 0) AS bronze
+	FROM CROSSTAB('SELECT concat(games, '' - '', nr.region) as games
+					, medal
+				  	, count(1) as total_medals
+				  FROM olympics_history oh
+				  JOIN olympics_history_noc_regions nr ON nr.noc = oh.noc
+				  where medal <> ''NA''
+				  GROUP BY games,nr.region,medal
+				  order BY games,medal', 'values (''Bronze''), (''Gold''), (''Silver'')') AS FINAL_RESULT(games TEXT, bronze BIGINT, gold BIGINT, silver BIGINT)
+	)
+SELECT DISTINCT games,
+	CONCAT (
+		first_value(country) OVER (
+			PARTITION BY games ORDER BY gold DESC
+			),
+		' - ',
+		first_value(gold) OVER (
+			PARTITION BY games ORDER BY gold DESC
+			)
+		) AS Max_Gold,
+	CONCAT (
+		first_value(country) OVER (
+			PARTITION BY games ORDER BY silver DESC
+			),
+		' - ',
+		first_value(silver) OVER (
+			PARTITION BY games ORDER BY silver DESC
+			)
+		) AS Max_Silver,
+	CONCAT (
+		first_value(country) OVER (
+			PARTITION BY games ORDER BY bronze DESC
+			),
+		' - ',
+		first_value(bronze) OVER (
+			PARTITION BY games ORDER BY bronze DESC
+			)
+		) AS Max_Bronze
+FROM TEMP
+ORDER BY games;
+
+--   17. Identify which country won the most gold, most silver, most bronze medals and the most medals in each olympic games.
+WITH temp as
+	(SELECT substring(games, 1, position(' - ' in games) - 1) as games
+	 	, substring(games, position(' - ' in games) + 3) as country
+        , coalesce(gold, 0) as gold
+        , coalesce(silver, 0) as silver
+        , coalesce(bronze, 0) as bronze
+        , coalesce(bronze, 0)+coalesce(silver, 0)+coalesce(gold, 0) as total_medals
+	FROM CROSSTAB('SELECT concat(games, '' - '', nr.region) as games
+					, medal
+				  	, count(1) as total_medals
+				  FROM olympics_history oh
+				  JOIN olympics_history_noc_regions nr ON nr.noc = oh.noc
+				  where medal <> ''NA''
+				  GROUP BY games,nr.region,medal
+				  order BY games,medal',
+              'values (''Bronze''), (''Gold''), (''Silver'')')
+			   AS FINAL_RESULT(games text, bronze bigint, gold bigint, silver bigint))
+	select distinct games
+		,concat(first_value(country) over (partition by games order by gold desc),'-',first_value(gold) over (partition by games order by gold desc)) as max_gold
+		,concat(first_value(country) over (partition by games order by silver desc),'-',first_value(silver) over (partition by games order by silver desc)) as max_silver
+		,concat(first_value(country) over (partition by games order by bronze desc),'-',first_value(bronze) over (partition by games order by bronze desc)) as max_bronze
+		,concat(first_value(country) over (partition by games order by total_medals desc),'-',first_value(total_medals) over (partition by games order by total_medals desc)) as max_medals
+	from temp order by games;
