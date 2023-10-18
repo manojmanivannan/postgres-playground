@@ -92,4 +92,22 @@ Note: Prefer the account id with the least value in case of same number of uniqu
 20. Break down all olympic games where india won medal for Hockey and how many medals in each olympic games.
 </details>
 
+<details>
+<summary>Science Federal Giving</summary>
 
+1. How many committees are there in the dataset and what are their types and parties?
+2. Which candidate received the most contributions in total and from which state and party?
+3. What is the average transaction amount for each election cycle and how does it compare to the inflation-adjusted amount?
+4. Which occupation has the highest classification score and how many contributions did they make?
+5. Which committee made the most transfers to other committees and how much did they transfer in total?
+6. What is the distribution of transaction types and how does it vary by report type?
+7. Which state has the highest number of hate crimes per 100k population reported by SPLC and how does it relate to the share of voters who voted for Trump?
+8. What is the correlation between the share of non-citizen population and the share of population with high school degree in each state?
+9. Which entity type made the most contributions to candidates running for president and how much did they contribute in total?
+10. How many candidates are there in the dataset and what are their offices and statuses?
+11. What is the most common memo code and what does it mean?
+12. Which candidate received the largest single contribution and from whom?
+13. How many contributions were made on the transaction date of 11/08/2016 (election day) and what was the total amount?
+14. Which employer has the most employees who made contributions and what is their average contribution amount?
+15. How many contributions were made for each political party affiliation and what was the average contribution amount?
+</details>

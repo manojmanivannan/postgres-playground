@@ -25,3 +25,17 @@ if not exist dataset\csv\athlete_events.csv (
 ) else (
 	echo "athlete_events.csv already exists"
 )
+
+if not exist dataset\csv\science_federal_giving.csv (
+	rem Windows Command Prompt command to download the file using curl
+	powershell -Command "(New-Object Net.WebClient).DownloadFile('https://media.githubusercontent.com/media/fivethirtyeight/data/master/science-giving/science_federal_giving.csv', 'dataset\csv\science_federal_giving.csv')"
+	if !errorlevel! equ 0 (
+		echo Science Federal Giving data downloaded successfully.
+		echo Cleaning downloaded csv
+		powershell -Command "(Get-Content dataset\csv\science_federal_giving.csv) -replace 'NULL', '' | Set-Content dataset\csv\science_federal_giving.csv"
+	) else (
+		echo Science Federal Giving data download failed.
+	)
+) else (
+	echo "science_federal_giving.csv already exists"
+)

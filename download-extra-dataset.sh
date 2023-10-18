@@ -32,3 +32,20 @@ then
 else
 	echo -e "Olympics data already exists"
 fi
+
+if ! [ -f ./dataset/csv/science_federal_giving.csv ]
+then
+	echo -e "Downloading Science Federal data from github.com"
+	curl -s -o ./dataset/csv/science_federal_giving.csv https://media.githubusercontent.com/media/fivethirtyeight/data/master/science-giving/science_federal_giving.csv
+	sed -i 's/NULL//g' ./dataset/csv/science_federal_giving.csv
+
+	if [ $? -eq 0 ]
+	then
+		echo "Download complete"
+	else
+		echo "Download failed"
+		exit 1
+	fi
+else
+	echo -e "Science federal giving data already exists"
+fi
