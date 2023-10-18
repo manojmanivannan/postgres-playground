@@ -33,10 +33,10 @@ else
 	echo -e "Olympics data already exists"
 fi
 
-if ! [ -f ./dataset/csv/crime_data.csv ]
+if ! [ -f ./dataset/csv/scrabble_games.csv ]
 then
 	echo -e "Downloading Scrabble data from github.com"
-	curl -s -o ./dataset/csv/crime_data.csv https://media.githubusercontent.com/media/fivethirtyeight/data/master/scrabble-games/scrabble_games.csv
+	curl -s -o ./dataset/csv/scrabble_games.csv https://media.githubusercontent.com/media/fivethirtyeight/data/master/scrabble-games/scrabble_games.csv
 
 	if [ $? -eq 0 ]
 	then
