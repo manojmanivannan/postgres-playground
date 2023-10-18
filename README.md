@@ -108,3 +108,24 @@ Note: Prefer the account id with the least value in case of same number of uniqu
 10. Which player had the longest winning streak and which player had the longest losing streak?
 
 </details>
+
+<details>
+<summary>Crime Data</summary>
+
+1. How many crimes were reported in each area and what was the most common crime type?
+2. Which crime had the highest average transaction amount and how many times did it occur?
+3. What is the percentage of male and female victims and how does it vary by crime type?
+4. Which weapon was used the most in violent crimes and what was the average victim age?
+5. How many crimes occurred in each month and which month had the highest crime rate?
+6. What is the distribution of victim descent and how does it relate to the crime type and area?
+7. Which premise type had the most crimes and what was the most common time of occurrence?
+8. How many crimes were solved and what was the status description for each crime type?
+9. Which crime type had the most lexicon codes and what do they mean?
+10. What is the correlation between the victim age and the transaction amount for each crime type?
+11. How many crimes involved multiple crime codes and what were the most frequent combinations?
+12. Which area had the highest number of hate crimes and how does it relate to the victim descent?
+13. What is the difference between the old rating and the new rating for each crime type and how does it affect the position?
+14. Which crime type had the longest time gap between the date reported and the date occurred and what was the average gap?
+15. How many crimes were committed by repeat offenders and what was their average transaction amount?
+
+</details>
