@@ -25,3 +25,15 @@ if not exist dataset\csv\athlete_events.csv (
 ) else (
 	echo "athlete_events.csv already exists"
 )
+
+if not exist dataset\csv\scrabble_games.csv (
+	rem Windows Command Prompt command to download the file using curl
+	powershell -Command "(New-Object Net.WebClient).DownloadFile('https://media.githubusercontent.com/media/fivethirtyeight/data/master/scrabble-games/scrabble_games.csv', 'dataset\csv\scrabble_games.csv')"
+	if !errorlevel! equ 0 (
+		echo scrabble data downloaded successfully.
+	) else (
+		echo scrabble data download failed.
+	)
+) else (
+	echo "scrabble_games.csv already exists"
+)

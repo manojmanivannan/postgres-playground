@@ -50,7 +50,7 @@ cursor.execute(f'CREATE SCHEMA IF NOT EXISTS {schema_name}')
 
 # Create Users Table
 cursor.execute(f'''
-    CREATE TABLE {schema_name}.Users (
+    CREATE TABLE IF NOT EXISTS {schema_name}.Users (
         user_id INTEGER PRIMARY KEY,
         username TEXT,
         email TEXT,
@@ -60,7 +60,7 @@ cursor.execute(f'''
 
 # Create Products Table
 cursor.execute(f'''
-    CREATE TABLE {schema_name}.Products (
+    CREATE TABLE IF NOT EXISTS {schema_name}.Products (
         product_id INTEGER PRIMARY KEY,
         product_name TEXT,
         category TEXT,
@@ -70,7 +70,7 @@ cursor.execute(f'''
 
 # Create Orders Table
 cursor.execute(f'''
-    CREATE TABLE {schema_name}.Orders (
+    CREATE TABLE IF NOT EXISTS {schema_name}.Orders (
         order_id INTEGER PRIMARY KEY,
         user_id INTEGER,
         order_date DATE,
@@ -81,7 +81,7 @@ cursor.execute(f'''
 
 # Create OrderDetails Table
 cursor.execute(f'''
-    CREATE TABLE {schema_name}.OrderDetails (
+    CREATE TABLE IF NOT EXISTS {schema_name}.OrderDetails (
         order_detail_id INTEGER PRIMARY KEY,
         order_id INTEGER,
         product_id INTEGER,
@@ -90,6 +90,10 @@ cursor.execute(f'''
         FOREIGN KEY (product_id) REFERENCES {schema_name}.Products(product_id)
     )
 ''')
+cursor.execute(f'''TRUNCATE TABLE {schema_name}.Users''')
+cursor.execute(f'''TRUNCATE TABLE {schema_name}.Products''')
+cursor.execute(f'''TRUNCATE TABLE {schema_name}.Orders''')
+cursor.execute(f'''TRUNCATE TABLE {schema_name}.OrderDetails''')
 
 # Generate mock data for Users and Products tables
 for i in range(user_range):

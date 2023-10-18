@@ -93,3 +93,18 @@ Note: Prefer the account id with the least value in case of same number of uniqu
 </details>
 
 
+<details>
+<summary>Scrabble Game</summary>
+
+1. How many games did Harriette Lakernick win in the first tournament and what was her average rating change?
+2. Which player had the highest rating in the dataset and how many games did they play?
+3. How many games ended in a tie and which division had the most ties?
+4. Which date had the most games played and what was the total amount of transaction amount on that date?
+5. What is the most common lexicon used in the games and how does it affect the scores?
+6. Which player had the most wins against players with higher ratings than them and what was their win percentage?
+7. How many games were played in each round and which round had the highest average score difference?
+8. Which state had the most players participating in the games and what was their average rating?
+9. What is the distribution of winner and loser positions in each division and how does it relate to the ratings?
+10. Which player had the longest winning streak and which player had the longest losing streak?
+
+</details>
