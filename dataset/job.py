@@ -90,10 +90,10 @@ cursor.execute(f'''
         FOREIGN KEY (product_id) REFERENCES {schema_name}.Products(product_id)
     )
 ''')
-cursor.execute(f'''TRUNCATE TABLE {schema_name}.Users''')
-cursor.execute(f'''TRUNCATE TABLE {schema_name}.Products''')
-cursor.execute(f'''TRUNCATE TABLE {schema_name}.Orders''')
-cursor.execute(f'''TRUNCATE TABLE {schema_name}.OrderDetails''')
+cursor.execute(f'''TRUNCATE {schema_name}.Users CASCADE''')
+cursor.execute(f'''TRUNCATE {schema_name}.Products CASCADE''')
+cursor.execute(f'''TRUNCATE {schema_name}.Orders CASCADE''')
+cursor.execute(f'''TRUNCATE {schema_name}.OrderDetails CASCADE''')
 
 # Generate mock data for Users and Products tables
 for i in range(user_range):
