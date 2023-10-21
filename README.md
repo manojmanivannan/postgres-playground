@@ -99,7 +99,7 @@ Note: Prefer the account id with the least value in case of same number of uniqu
 1. How many games did Harriette Lakernick win in the first tournament and what was her average rating change?
 2. Which player had the highest rating in the dataset and how many games did they play?
 3. How many games ended in a tie and which division had the most ties?
-4. Which date had the most games played and what was the total amount of transaction amount on that date?
+4. Which date had the most games played ?
 5. What is the most common lexicon used in the games and how does it affect the scores?
 6. Which player had the most wins against players with higher ratings than them and what was their win percentage?
 7. How many games were played in each round and which round had the highest average score difference?
@@ -113,7 +113,7 @@ Note: Prefer the account id with the least value in case of same number of uniqu
 <summary>Crime Data</summary>
 
 1. How many crimes were reported in each area and what was the most common crime type?
-2. Which crime had the highest average transaction amount and how many times did it occur?
+2. Which are the months with highest reported crimes?
 3. What is the percentage of male and female victims and how does it vary by crime type?
 4. Which weapon was used the most in violent crimes and what was the average victim age?
 5. How many crimes occurred in each month and which month had the highest crime rate?
