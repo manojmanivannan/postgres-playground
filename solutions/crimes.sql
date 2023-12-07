@@ -143,3 +143,28 @@ FROM crime_data cd
 	,top_weapon
 WHERE weapon_used_description = top_weapon.weapon_used
 GROUP BY cd.weapon_used_description;
+
+-- 5. How many crimes occurred in each month and which month had the highest crime rate?
+SELECT max(date_reported)
+	,min(date_reported)
+FROM crime_data cd;
+
+WITH tmp1
+AS (
+	SELECT extract(month FROM date_reported)::VARCHAR AS month
+		,count(1) AS crimes
+	FROM crime_data cd
+	GROUP BY month
+	)
+	,tmp2
+AS (
+	SELECT *
+		,rank() OVER (
+			ORDER BY crimes DESC
+			)
+	FROM tmp1
+	)
+SELECT month
+	,crimes
+FROM tmp2
+WHERE rank = 1;
