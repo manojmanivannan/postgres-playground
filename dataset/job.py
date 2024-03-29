@@ -79,6 +79,28 @@ cursor.execute(f'''
     )
 ''')
 
+# Create constraint on total_amount on Orders table using trigger
+cursor.execute(f'''
+CREATE OR REPLACE FUNCTION enforce_order_amount_constraint()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.total_amount < 100 THEN
+        RAISE EXCEPTION 'Total amount cannot be less than 100';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+''')
+
+
+
+# Creating a trigger to enforce total_amount constraint
+cursor.execute(f'''
+CREATE TRIGGER check_amount
+BEFORE INSERT OR UPDATE ON ecomm.orders
+FOR EACH ROW EXECUTE FUNCTION enforce_order_amount_constraint()
+''')
+
 # Create OrderDetails Table
 cursor.execute(f'''
     CREATE TABLE IF NOT EXISTS {schema_name}.OrderDetails (
@@ -122,7 +144,10 @@ for i in range(order_range):
     order_id = i+1
     order_date = fake.date_between(start_date='-2y', end_date='today')
     total_amount = round(random.uniform(10, 500), 2)
-    cursor.execute(f'INSERT INTO {schema_name}.Orders (user_id, order_id, order_date, total_amount) VALUES (%s, %s, %s, %s)', (user_id, order_id, order_date, total_amount))
+    try:
+        cursor.execute(f'INSERT INTO {schema_name}.Orders (user_id, order_id, order_date, total_amount) VALUES (%s, %s, %s, %s)', (user_id, order_id, order_date, total_amount))
+    except Exception as e:
+        print(f"Error inserting order {order_id}: {e}")
 
 for i in range(order_range):
     order_id = random.randint(1, order_range)
