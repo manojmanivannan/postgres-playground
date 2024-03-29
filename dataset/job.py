@@ -25,7 +25,7 @@ max_retries = 10  # Adjust the number of retries as needed
 retry_delay = 5  # Adjust the delay between retries (in seconds) as needed
 user_range = 50 # Adjust the number users you need
 order_range = 250
-schema_name = 'ecomm'
+schema_name = 'ecomm' # name of the schema
 
 # Attempt to connect to the PostgreSQL server with retries
 for retry in range(max_retries):
