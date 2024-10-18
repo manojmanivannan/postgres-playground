@@ -21,7 +21,7 @@ db_params = {
     'password': 'postgres',
 }
 
-max_retries = 10  # Adjust the number of retries as needed
+max_retries = 11  # Adjust the number of retries as needed
 retry_delay = 5  # Adjust the delay between retries (in seconds) as needed
 user_range = 50 # Adjust the number users you need
 order_range = 250
