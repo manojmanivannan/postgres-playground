@@ -23,7 +23,7 @@ db_params = {
 
 max_retries = 12  # Adjust the number of retries as needed
 retry_delay = 5  # Adjust the delay between retries (in seconds) as needed
-user_range = 50 # Adjust the number users you need
+user_range = 51 # Adjust the number users you need
 order_range = 250
 schema_name = 'ecomm' # name of the schema
 
